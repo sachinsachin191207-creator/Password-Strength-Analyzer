@@ -1,28 +1,28 @@
 # 🔐 Password Strength Analyzer
 
-A Python-based cybersecurity project that analyzes password strength using character diversity, password length, estimated entropy, common password detection, and predictable pattern detection.
+A Python-based Password Strength Analyzer with an Apple-inspired, minimalist white graphical interface.
 
 ## 🚀 Features
 
-- Lowercase, uppercase, digit, and special character detection
-- Character pool calculation
-- Password length analysis
-- Estimated entropy calculation
-- Password strength classification
+- Password strength evaluation (0–100 score)
+- Character pool and entropy calculation
+- Lowercase, uppercase, digit and special character detection
 - Common password detection
 - Repeated character detection
-- Predictable sequence detection
-- Security recommendations
-- Hidden password input using `getpass`
-- Automated unit testing using Python `unittest`
+- Predictable sequence and pattern detection
+- Personalized improvement recommendations
+- Interactive browser-based GUI
+- Password visibility toggle
+- Unit testing using Python `unittest`
 
 ## 🛠️ Technologies Used
 
-- Python 3
-- String module
-- Math module
-- Getpass module
-- Unittest framework
+- Python
+- Flask
+- HTML5
+- CSS3
+- JavaScript
+- Unittest
 
 ## 📁 Project Structure
 
@@ -31,68 +31,72 @@ Password-Strength-Analyzer/
 │
 ├── main.py
 ├── test_main.py
-└── README.md
+├── app.py
+├── README.md
+├── requirements.txt
+│
+├── templates/
+│   └── index.html
+│
+└── static/
+    ├── style.css
+    └── script.js
 ```
 
-## ▶️ How to Run
+## ⚙️ Installation and Setup
 
-1. Clone the repository:
+### 1. Clone the repository
 
-   `git clone https://github.com/sachinsachin191207-creator/Password-Strength-Analyzer.git`
+```bash
+git clone https://github.com/sachinsachin191207-creator/Password-Strength-Analyzer.git
+```
 
-2. Open the project folder.
+### 2. Open the project folder
 
-3. Run the analyzer:
+```bash
+cd Password-Strength-Analyzer
+```
 
-   `python main.py`
+### 3. Install dependencies
 
-4. Enter a sample password when prompted.
+```bash
+python -m pip install flask
+```
 
-## 🧪 Automated Testing
+### 4. Run the application
 
-This project uses Python's built-in `unittest` framework.
+```bash
+python app.py
+```
 
-Run the test suite using:
+### 5. Open in your browser
 
-`python -m unittest -v test_main.py`
+Visit:
 
-### Test Coverage
+```text
+http://127.0.0.1:5000
+```
 
-- Empty password validation
-- Common password detection
-- Repeated character detection
-- Predictable pattern detection
-- Lowercase detection
-- Uppercase detection
-- Digit detection
-- Special character detection
-- Character pool calculation
-- Password length calculation
+## 🧪 Run Unit Tests
 
-## 📊 Entropy Calculation
+```bash
+python -m unittest -v test_main.py
+```
 
-The project uses the theoretical entropy formula:
+## 🔒 Privacy Note
 
-`H = L × log₂(N)`
+The application is designed to process password submissions through a local Flask server. It does not intentionally store or transmit passwords to third-party services. Use only test passwords while experimenting.
 
-Where:
+## 📊 Password Analysis
 
-- H = Estimated entropy in bits
-- L = Password length
-- N = Character pool size
+The application uses a custom educational scoring system based on password length, character diversity, estimated entropy and predictable patterns.
 
-This is a theoretical estimate assuming randomly and independently selected characters. It does not represent the actual guessability of human-created passwords.
-
-## 🔒 Privacy
-
-- Password analysis is performed locally.
-- The program does not intentionally transmit passwords to external services.
-- Never upload real passwords or credentials to GitHub.
-
-## 🎯 Project Objective
-
-To understand password security concepts, Python programming, password analysis techniques, and automated software testing.
+The score is an estimate, not a guarantee of real-world password security.
 
 ## 👨‍💻 Author
 
 Sachin Kumar
+
+---
+
+⭐ If you find this project interesting, consider giving the repository a star!
