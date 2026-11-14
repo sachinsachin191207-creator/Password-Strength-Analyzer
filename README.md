@@ -14,6 +14,10 @@ A Python-based Password Strength Analyzer with an Apple-inspired, minimalist whi
 - Interactive browser-based GUI
 - Password visibility toggle
 - Unit testing using Python `unittest`
+## 📸 Application Preview
+
+![Password Strength Analyzer](screenshots/password-Strength-Analyzer-demo(1).png)
+![Password Strength Analyzer](screenshots/password-Strength-Analyzer-demo(2).png)
 
 ## 🛠️ Technologies Used
 
