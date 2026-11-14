@@ -62,7 +62,7 @@ def analyze_password(password):
         length_status = "Good"
 
     # Entropy calculation
-    entropy = length * math.log2(character_pool)
+    entropy = length * math.log2(character_pool) if character_pool > 0 else 0
     entropy = round(entropy, 2)
 
     # Common password detection

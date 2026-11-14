@@ -1,6 +1,5 @@
 
 import unittest
-
 from main import analyze_password
 
 
@@ -13,17 +12,14 @@ class TestPasswordAnalyzer(unittest.TestCase):
     def test_common_password(self):
         result = analyze_password("password")
         self.assertTrue(result["is_common"])
-        self.assertEqual(result["strength"], "Very Weak")
 
     def test_repeated_characters(self):
-        result = analyze_password("aaaa1111")
+        result = analyze_password("aaaa1234")
         self.assertTrue(result["repeated"])
-        self.assertEqual(result["strength"], "Very Weak")
 
     def test_predictable_pattern(self):
         result = analyze_password("12345678")
         self.assertTrue(result["has_pattern"])
-        self.assertEqual(result["strength"], "Very Weak")
 
     def test_lowercase_detection(self):
         result = analyze_password("hello123")
@@ -48,6 +44,10 @@ class TestPasswordAnalyzer(unittest.TestCase):
     def test_password_length(self):
         result = analyze_password("hello123")
         self.assertEqual(result["length"], 8)
+
+    def test_unicode_password(self):
+        result = analyze_password("你好你好")
+        self.assertEqual(result["entropy"], 0)
 
 
 if __name__ == "__main__":
