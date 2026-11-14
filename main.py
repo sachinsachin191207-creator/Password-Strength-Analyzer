@@ -3,6 +3,7 @@ import string
 import math
 import getpass
 
+
 COMMON_PASSWORDS = {
     "password",
     "123456",
@@ -13,6 +14,7 @@ COMMON_PASSWORDS = {
     "welcome",
     "abc123"
 }
+
 
 PREDICTABLE_PATTERNS = [
     "0123456789",
@@ -26,6 +28,51 @@ PREDICTABLE_PATTERNS = [
     "asdf",
     "zxcv"
 ]
+
+
+def contains_sequence(password):
+    """Detect ascending or descending sequences of 4 characters."""
+
+    allowed_characters = string.ascii_lowercase + string.digits
+
+    for i in range(len(password) - 3):
+        sequence = password[i:i + 4]
+
+        if all(char in allowed_characters for char in sequence):
+
+            ascending = all(
+                ord(sequence[j + 1]) - ord(sequence[j]) == 1
+                for j in range(3)
+            )
+
+            descending = all(
+                ord(sequence[j]) - ord(sequence[j + 1]) == 1
+                for j in range(3)
+            )
+
+            if ascending or descending:
+                return True
+
+    return False
+
+
+def contains_repeated_pattern(password):
+    """Detect repeated blocks such as 121212 or ababab."""
+
+    for block_size in range(2, 5):
+
+        for i in range(len(password) - (2 * block_size) + 1):
+
+            first_block = password[i:i + block_size]
+            second_block = password[i + block_size:i + (2 * block_size)]
+
+            if (
+                first_block == second_block
+                and len(set(first_block)) > 1
+            ):
+                return True
+
+    return False
 
 
 def analyze_password(password):
@@ -62,7 +109,10 @@ def analyze_password(password):
         length_status = "Good"
 
     # Entropy calculation
-    entropy = length * math.log2(character_pool) if character_pool > 0 else 0
+    entropy = (
+        length * math.log2(character_pool)
+        if character_pool > 0 else 0
+    )
     entropy = round(entropy, 2)
 
     # Common password detection
@@ -75,12 +125,22 @@ def analyze_password(password):
         for i in range(length - 3)
     )
 
-    # Predictable pattern detection
+    # Advanced predictable pattern detection
     normalized_password = password.lower()
 
-    has_pattern = any(
+    listed_pattern = any(
         pattern in normalized_password
         for pattern in PREDICTABLE_PATTERNS
+    )
+
+    sequential_pattern = contains_sequence(normalized_password)
+
+    repeated_pattern = contains_repeated_pattern(normalized_password)
+
+    has_pattern = (
+        listed_pattern
+        or sequential_pattern
+        or repeated_pattern
     )
 
     # Strength classification
@@ -107,10 +167,14 @@ def analyze_password(password):
         recommendations.append("Avoid repeating the same character.")
 
     if has_pattern:
-        recommendations.append("Avoid predictable sequences and keyboard patterns.")
+        recommendations.append(
+            "Avoid predictable sequences and repeated patterns."
+        )
 
     if length < 12:
-        recommendations.append("Increase password length to at least 12 characters.")
+        recommendations.append(
+            "Increase password length to at least 12 characters."
+        )
 
     if not lowercase:
         recommendations.append("Include lowercase letters.")
@@ -147,6 +211,7 @@ def main():
 
     try:
         result = analyze_password(password)
+
     except ValueError as error:
         print("\nError:", error)
         return

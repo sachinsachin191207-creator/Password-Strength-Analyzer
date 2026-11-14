@@ -49,6 +49,24 @@ class TestPasswordAnalyzer(unittest.TestCase):
         result = analyze_password("你好你好")
         self.assertEqual(result["entropy"], 0)
 
+    # Advanced pattern detection tests
+
+    def test_ascending_sequence(self):
+        result = analyze_password("abcd1234")
+        self.assertTrue(result["has_pattern"])
+
+    def test_descending_sequence(self):
+        result = analyze_password("4321abcd")
+        self.assertTrue(result["has_pattern"])
+
+    def test_repeated_block_pattern(self):
+        result = analyze_password("abababXY9!")
+        self.assertTrue(result["has_pattern"])
+
+    def test_random_pattern_not_detected(self):
+        result = analyze_password("mK8!vT2#pQ")
+        self.assertFalse(result["has_pattern"])
+
 
 if __name__ == "__main__":
     unittest.main()
