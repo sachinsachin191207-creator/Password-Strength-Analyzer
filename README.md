@@ -1,10 +1,10 @@
 # 🔐 Password Strength Analyzer
 
-A Python-based cybersecurity project that analyzes password strength using character diversity, password length, estimated entropy, and predictable pattern detection.
+A Python-based cybersecurity project that analyzes password strength using character diversity, password length, estimated entropy, common password detection, and predictable pattern detection.
 
 ## 🚀 Features
 
-- Character type detection (lowercase, uppercase, digits, special characters)
+- Lowercase, uppercase, digit, and special character detection
 - Character pool calculation
 - Password length analysis
 - Estimated entropy calculation
@@ -14,6 +14,7 @@ A Python-based cybersecurity project that analyzes password strength using chara
 - Predictable sequence detection
 - Security recommendations
 - Hidden password input using `getpass`
+- Automated unit testing using Python `unittest`
 
 ## 🛠️ Technologies Used
 
@@ -21,43 +22,76 @@ A Python-based cybersecurity project that analyzes password strength using chara
 - String module
 - Math module
 - Getpass module
+- Unittest framework
+
+## 📁 Project Structure
+
+```text
+Password-Strength-Analyzer/
+│
+├── main.py
+├── test_main.py
+└── README.md
+```
 
 ## ▶️ How to Run
 
-1. Clone this repository:
+1. Clone the repository:
 
    `git clone https://github.com/sachinsachin191207-creator/Password-Strength-Analyzer.git`
 
 2. Open the project folder.
 
-3. Run:
+3. Run the analyzer:
 
    `python main.py`
 
-4. Enter a test password when prompted.
+4. Enter a sample password when prompted.
 
-## 📊 Analysis Methods
+## 🧪 Automated Testing
 
-The project uses the following theoretical entropy formula:
+This project uses Python's built-in `unittest` framework.
+
+Run the test suite using:
+
+`python -m unittest -v test_main.py`
+
+### Test Coverage
+
+- Empty password validation
+- Common password detection
+- Repeated character detection
+- Predictable pattern detection
+- Lowercase detection
+- Uppercase detection
+- Digit detection
+- Special character detection
+- Character pool calculation
+- Password length calculation
+
+## 📊 Entropy Calculation
+
+The project uses the theoretical entropy formula:
 
 `H = L × log₂(N)`
 
 Where:
+
 - H = Estimated entropy in bits
 - L = Password length
 - N = Character pool size
 
-Entropy is an estimate, not a guarantee of real-world password security. Common passwords and predictable patterns are checked separately.
+This is a theoretical estimate assuming randomly and independently selected characters. It does not represent the actual guessability of human-created passwords.
 
 ## 🔒 Privacy
 
-Password analysis is performed locally. The program does not intentionally transmit passwords to external services.
+- Password analysis is performed locally.
+- The program does not intentionally transmit passwords to external services.
+- Never upload real passwords or credentials to GitHub.
 
-Use sample passwords for testing. Never upload real passwords or secrets to GitHub.
+## 🎯 Project Objective
 
-## 🎯 Project Purpose
-
-This project was developed to understand password security concepts, Python programming, and basic cybersecurity practices.
+To understand password security concepts, Python programming, password analysis techniques, and automated software testing.
 
 ## 👨‍💻 Author
 
