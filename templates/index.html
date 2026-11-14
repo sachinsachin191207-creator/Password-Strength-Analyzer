@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Password Strength Analyzer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">Password Analyzer</div>
+        <div class="privacy">● Local Processing</div>
+    </header>
+
+    <main class="container">
+
+        <section class="hero">
+            <h1>Know your password.<br>Understand its strength.</h1>
+
+            <p>
+                Analyze your password security with a simple,
+                intelligent password strength analyzer.
+            </p>
+        </section>
+
+        <section class="analyzer-card">
+
+            <h2>Test Your Password</h2>
+
+            <p class="subtitle">
+                Enter a password below to analyze its security.
+            </p>
+
+            <form id="passwordForm">
+
+                <div class="input-group">
+                    <input
+                        type="password"
+                        id="passwordInput"
+                        placeholder="Enter your password"
+                        maxlength="1024"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <button type="button" id="togglePassword">
+                        Show
+                    </button>
+                </div>
+
+                <button type="submit" id="analyzeButton">
+                    Analyze Password
+                </button>
+
+            </form>
+
+            <p id="errorMessage" role="alert"></p>
+
+        </section>
+
+        <section id="results" class="results hidden">
+
+            <h2>Analysis Results</h2>
+
+            <div class="score-card">
+                <p>Your Password Score</p>
+                <h1 id="score">0/100</h1>
+                <h3 id="strength">Not analyzed</h3>
+
+                <div class="progress-background">
+                    <div id="progressBar"></div>
+                </div>
+            </div>
+
+            <div class="details-grid">
+
+                <div class="detail-box">
+                    <span>Password Length</span>
+                    <strong id="length">-</strong>
+                </div>
+
+                <div class="detail-box">
+                    <span>Character Pool</span>
+                    <strong id="pool">-</strong>
+                </div>
+
+                <div class="detail-box">
+                    <span>Character Types</span>
+                    <strong id="types">-</strong>
+                </div>
+
+                <div class="detail-box">
+                    <span>Estimated Entropy</span>
+                    <strong id="entropy">-</strong>
+                </div>
+
+            </div>
+
+            <h3>Security Checks</h3>
+            <div id="securityChecks" class="checks-grid"></div>
+
+            <h3>Recommendations</h3>
+            <ul id="recommendations"></ul>
+
+            <button type="button" id="resetButton">
+                Analyze Another Password
+            </button>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Password Strength Analyzer | Educational Project</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
