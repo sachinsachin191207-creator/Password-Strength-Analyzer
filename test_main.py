@@ -67,6 +67,15 @@ class TestPasswordAnalyzer(unittest.TestCase):
         result = analyze_password("mK8!vT2#pQ")
         self.assertFalse(result["has_pattern"])
 
+    def test_score_range(self):
+        result = analyze_password("mK8!vT2#pQ")
+        self.assertGreaterEqual(result["score"], 0)
+        self.assertLessEqual(result["score"], 100)
+
+    def test_common_password_gets_zero_score(self):
+        result = analyze_password("password")
+        self.assertEqual(result["score"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

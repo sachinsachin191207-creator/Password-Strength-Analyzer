@@ -75,6 +75,54 @@ def contains_repeated_pattern(password):
     return False
 
 
+def calculate_score(length, character_types, entropy,
+                    is_common, repeated, has_pattern):
+    """Calculate password score out of 100."""
+
+    # Length points
+    if length >= 16:
+        length_points = 40
+    elif length >= 12:
+        length_points = 30
+    elif length >= 8:
+        length_points = 15
+    else:
+        length_points = 0
+
+    # Character diversity points
+    diversity_points = min(character_types * 8, 30)
+
+    # Entropy points
+    if entropy >= 80:
+        entropy_points = 30
+    elif entropy >= 60:
+        entropy_points = 24
+    elif entropy >= 36:
+        entropy_points = 16
+    elif entropy >= 28:
+        entropy_points = 8
+    else:
+        entropy_points = 0
+
+    # Calculate base score
+    score = length_points + diversity_points + entropy_points
+
+    # Apply penalties
+    if is_common:
+        score -= 50
+
+    if repeated:
+        score -= 20
+
+    if has_pattern:
+        score -= 25
+
+    # Keep score between 0 and 100
+    score = max(0, min(100, score))
+
+    return score
+
+
 def analyze_password(password):
 
     if not password:
@@ -113,19 +161,20 @@ def analyze_password(password):
         length * math.log2(character_pool)
         if character_pool > 0 else 0
     )
+
     entropy = round(entropy, 2)
 
     # Common password detection
     is_common = password.lower() in COMMON_PASSWORDS
 
-    # Repeated character detection (4 or more consecutive)
+    # Repeated character detection
     repeated = any(
         password[i] == password[i + 1] ==
         password[i + 2] == password[i + 3]
         for i in range(length - 3)
     )
 
-    # Advanced predictable pattern detection
+    # Predictable pattern detection
     normalized_password = password.lower()
 
     listed_pattern = any(
@@ -143,16 +192,32 @@ def analyze_password(password):
         or repeated_pattern
     )
 
-    # Strength classification
-    if is_common or repeated or has_pattern:
+    # Count character types
+    character_types = sum([
+        lowercase,
+        uppercase,
+        digits,
+        special
+    ])
+
+    # Calculate score
+    score = calculate_score(
+        length,
+        character_types,
+        entropy,
+        is_common,
+        repeated,
+        has_pattern
+    )
+
+    # Strength classification based on score
+    if score < 25:
         strength = "Very Weak"
-    elif entropy < 28:
-        strength = "Very Weak"
-    elif entropy < 36:
+    elif score < 50:
         strength = "Weak"
-    elif entropy < 60:
+    elif score < 70:
         strength = "Medium"
-    elif entropy < 80:
+    elif score < 85:
         strength = "Strong"
     else:
         strength = "Very Strong"
@@ -194,12 +259,14 @@ def analyze_password(password):
         "digits": digits,
         "special": special,
         "character_pool": character_pool,
+        "character_types": character_types,
         "length": length,
         "length_status": length_status,
         "entropy": entropy,
         "is_common": is_common,
         "repeated": repeated,
         "has_pattern": has_pattern,
+        "score": score,
         "strength": strength,
         "recommendations": recommendations
     }
@@ -224,6 +291,7 @@ def main():
     print("Special Characters:", result["special"])
 
     print("\nCharacter Pool:", result["character_pool"])
+    print("Character Types:", result["character_types"])
     print("Password Length:", result["length"])
     print("Length Status:", result["length_status"])
     print("Estimated Entropy:", result["entropy"], "bits")
@@ -232,7 +300,9 @@ def main():
     print("Repeated Characters:", result["repeated"])
     print("Predictable Pattern:", result["has_pattern"])
 
-    print("\nPassword Strength:", result["strength"])
+    print("\n========== FINAL SCORE ==========")
+    print("Password Score:", result["score"], "/ 100")
+    print("Password Strength:", result["strength"])
 
     print("\n========== RECOMMENDATIONS ==========")
 
@@ -240,8 +310,7 @@ def main():
         for item in result["recommendations"]:
             print("-", item)
     else:
-        print("Good character variety and length.")
-        print("Avoid predictable password patterns.")
+        print("No improvement suggestions from these basic checks.")
 
     print("\n====================================")
     print("       ANALYSIS COMPLETED")
