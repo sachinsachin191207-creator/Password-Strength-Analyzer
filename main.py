@@ -3,8 +3,7 @@ import string
 import math
 import getpass
 
-# Common password examples
-common_passwords = {
+COMMON_PASSWORDS = {
     "password",
     "123456",
     "123456789",
@@ -15,11 +14,12 @@ common_passwords = {
     "abc123"
 }
 
-# Predictable sequences
-predictable_patterns = [
+PREDICTABLE_PATTERNS = [
     "0123456789",
     "9876543210",
     "123456789",
+    "12345678",
+    "87654321",
     "abcdefgh",
     "hgfedcba",
     "qwerty",
@@ -27,20 +27,19 @@ predictable_patterns = [
     "zxcv"
 ]
 
-# Get password securely
-password = getpass.getpass("Enter your password: ")
 
-if not password:
-    print("\nError: Password cannot be empty!")
+def analyze_password(password):
 
-else:
+    if not password:
+        raise ValueError("Password cannot be empty")
+
     # Character analysis
     lowercase = any(c in string.ascii_lowercase for c in password)
     uppercase = any(c in string.ascii_uppercase for c in password)
     digits = any(c in string.digits for c in password)
     special = any(c in string.punctuation for c in password)
 
-    # Character pool
+    # Character pool calculation
     character_pool = 0
 
     if lowercase:
@@ -63,17 +62,13 @@ else:
         length_status = "Good"
 
     # Entropy calculation
-    entropy = 0
-
-    if character_pool > 0:
-        entropy = length * math.log2(character_pool)
-
+    entropy = length * math.log2(character_pool)
     entropy = round(entropy, 2)
 
     # Common password detection
-    is_common = password.lower() in common_passwords
+    is_common = password.lower() in COMMON_PASSWORDS
 
-    # Repeated character detection
+    # Repeated character detection (4 or more consecutive)
     repeated = any(
         password[i] == password[i + 1] ==
         password[i + 2] == password[i + 3]
@@ -85,7 +80,7 @@ else:
 
     has_pattern = any(
         pattern in normalized_password
-        for pattern in predictable_patterns
+        for pattern in PREDICTABLE_PATTERNS
     )
 
     # Strength classification
@@ -129,29 +124,55 @@ else:
     if not special:
         recommendations.append("Consider including special characters.")
 
-    # Display results
+    return {
+        "lowercase": lowercase,
+        "uppercase": uppercase,
+        "digits": digits,
+        "special": special,
+        "character_pool": character_pool,
+        "length": length,
+        "length_status": length_status,
+        "entropy": entropy,
+        "is_common": is_common,
+        "repeated": repeated,
+        "has_pattern": has_pattern,
+        "strength": strength,
+        "recommendations": recommendations
+    }
+
+
+def main():
+
+    password = getpass.getpass("Enter your password: ")
+
+    try:
+        result = analyze_password(password)
+    except ValueError as error:
+        print("\nError:", error)
+        return
+
     print("\n========== PASSWORD ANALYSIS ==========")
 
-    print("Lowercase:", lowercase)
-    print("Uppercase:", uppercase)
-    print("Digits:", digits)
-    print("Special Characters:", special)
+    print("Lowercase:", result["lowercase"])
+    print("Uppercase:", result["uppercase"])
+    print("Digits:", result["digits"])
+    print("Special Characters:", result["special"])
 
-    print("\nCharacter Pool:", character_pool)
-    print("Password Length:", length)
-    print("Length Status:", length_status)
-    print("Estimated Entropy:", entropy, "bits")
+    print("\nCharacter Pool:", result["character_pool"])
+    print("Password Length:", result["length"])
+    print("Length Status:", result["length_status"])
+    print("Estimated Entropy:", result["entropy"], "bits")
 
-    print("\nCommon Password:", "Yes" if is_common else "No")
-    print("Repeated Characters:", "Yes" if repeated else "No")
-    print("Predictable Pattern:", "Yes" if has_pattern else "No")
+    print("\nCommon Password:", result["is_common"])
+    print("Repeated Characters:", result["repeated"])
+    print("Predictable Pattern:", result["has_pattern"])
 
-    print("\nPassword Strength:", strength)
+    print("\nPassword Strength:", result["strength"])
 
     print("\n========== RECOMMENDATIONS ==========")
 
-    if recommendations:
-        for item in recommendations:
+    if result["recommendations"]:
+        for item in result["recommendations"]:
             print("-", item)
     else:
         print("Good character variety and length.")
@@ -160,3 +181,7 @@ else:
     print("\n====================================")
     print("       ANALYSIS COMPLETED")
     print("====================================")
+
+
+if __name__ == "__main__":
+    main()
